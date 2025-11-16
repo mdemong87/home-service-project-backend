@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
   try {
 
     // Validate body data using Joi schema
-    const { error, value: { email, password, role } } = loginSchema.validate(req.body, { abortEarly: false });
+    const { error, value: { email, password } } = loginSchema.validate(req.body, { abortEarly: false });
 
 
     // If validation fails, return 400 with all validation errors
@@ -99,14 +99,6 @@ const loginUser = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
-
-
-
-
-    if (user?.role !== role) {
-      return res.status(401).json({ message: "Role Mismatch" });
-    }
-
 
 
     // If valid → return user data and token

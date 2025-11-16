@@ -37,10 +37,6 @@ export const loginSchema = Joi.object({
         "string.empty": "Password is required",
         "any.required": "Password is required",
     }),
-    role: Joi.string().valid("user", "provider", "admin").required().messages({
-        "any.only": "Role must be either 'user' or 'provider' or 'admin'",
-        "any.required": "Role is required",
-    }),
 });
 
 // Forgot password validation schema
