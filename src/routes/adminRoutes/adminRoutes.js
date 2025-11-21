@@ -14,7 +14,7 @@ router.post("/addarea", protect, authorize("admin"), addArea);
 
 router.get("/allcatagory", protect, authorize("admin"), getAllCatagory);
 
-router.get("/allarea", protect, authorize("admin"), getAllAreas);
+router.get("/allarea", getAllAreas);
 
 router.put("/updatecatagory/:id", protect, authorize("admin"), updateCatagory);
 

@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 
-router.get("/allproducts", protect, getAllProduct);
+router.get("/allproducts", getAllProduct);
 
 router.get("/singleProduct/:id", protect, getSingleProduct);
 
