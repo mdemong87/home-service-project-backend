@@ -12,7 +12,7 @@ router.post("/addcatagory", protect, authorize("admin"), addCatagory);
 
 router.post("/addarea", protect, authorize("admin"), addArea);
 
-router.get("/allcatagory", protect, authorize("admin"), getAllCatagory);
+router.get("/allcatagory", getAllCatagory);
 
 router.get("/allarea", getAllAreas);
 
