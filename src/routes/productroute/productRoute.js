@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/allproducts", getAllProduct);
 
-router.get("/singleProduct/:id", protect, getSingleProduct);
+router.get("/singleProduct/:id", getSingleProduct);
 
 router.post("/createProduct", protect, upload.fields([
     { name: "license", maxCount: 1 },
