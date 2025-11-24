@@ -10,6 +10,7 @@ import YAML from "yamljs";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import adminRoutes from './routes/adminRoutes/adminRoutes.js';
 import authRoutes from './routes/authroute/authUserRoutes.js';
+import contactRoutes from "./routes/contactRoutes/contactRoutes.js";
 import healthRoutes from "./routes/health/healthRoute.js";
 import productRoutes from './routes/productroute/productRoute.js';
 import reviewRoutes from './routes/review/reviewRoutes.js';
@@ -75,10 +76,14 @@ app.use("/", reviewRoutes);
 
 
 
+/********** Contact Routes Define Here *********/
+app.use("/", contactRoutes);
+
+
+
 
 /********** Admin Routes Define Here *********/
 app.use("/admin", adminRoutes);
-
 
 
 
