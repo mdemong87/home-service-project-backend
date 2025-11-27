@@ -173,9 +173,37 @@ const getSingleProduct = async (req, res) => {
 
 
 
-    const finalres = { ...product._doc, review: reviewUsers ? reviewUsers : [] };
+    const finalres = {
+      ...product._doc,
+      reviews: {
+        total: review.length,
+        analytics: {
+          average: review.length > 0 ? review.reduce((acc, rev) => acc + rev.reviewStar, 0) / review.length : 0,
+          star5: {
+            count: review.filter((rev) => rev.reviewStar === 5).length,
+            parsentage: review.filter((rev) => rev.reviewStar === 5).length > 0 ? Math.floor((review.filter((rev) => rev.reviewStar === 5).length / review.length) * 100) : 0
+          },
+          star4: {
+            count: review.filter((rev) => rev.reviewStar === 4).length,
+            parsentage: review.filter((rev) => rev.reviewStar === 4).length > 0 ? Math.floor((review.filter((rev) => rev.reviewStar === 4).length / review.length) * 100) : 0
+          },
+          star3: {
+            count: review.filter((rev) => rev.reviewStar === 3).length,
+            parsentage: review.filter((rev) => rev.reviewStar === 3).length > 0 ? Math.floor((review.filter((rev) => rev.reviewStar === 3).length / review.length) * 100) : 0
+          },
+          star2: {
+            count: review.filter((rev) => rev.reviewStar === 2).length,
+            parsentage: review.filter((rev) => rev.reviewStar === 2).length > 0 ? Math.floor((review.filter((rev) => rev.reviewStar === 2).length / review.length) * 100) : 0
+          },
+          star1: {
+            count: review.filter((rev) => rev.reviewStar === 1).length,
+            parsentage: review.filter((rev) => rev.reviewStar === 1).length > 0 ? Math.floor((review.filter((rev) => rev.reviewStar === 1).length / review.length) * 100) : 0
+          },
 
-
+        },
+        reviewsDetails: reviewUsers,
+      },
+    };
 
 
 

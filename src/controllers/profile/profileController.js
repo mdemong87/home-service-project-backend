@@ -1,5 +1,5 @@
+import Profile from "../../models/Profile.js";
 import ProfileSchama from "../../validationSchema/profileSchema.js";
-
 
 
 
@@ -145,7 +145,7 @@ const createProfileInfo = async (req, res) => {
 
 
         // Create product in database
-        const product = await Product.create(value);
+        const product = await Profile.create(value);
 
 
 

@@ -1,25 +1,25 @@
 import Joi from "joi";
 
 const profileSchema = Joi.object({
-    fullName: Joi.string().min(3).max(50).required(),
+    authuserId: Joi.string().required(),
+    fristName: Joi.string().min(3).max(50).optional(),
+    middleName: Joi.string().min(3).max(50).optional(),
+    lastName: Joi.string().min(3).max(50).optional(),
+    userName: Joi.string().min(3).max(50).required(),
+    role: Joi.string().min(3).max(50).required(),
     email: Joi.string().email().required(),
     phone: Joi.string()
         .pattern(/^[0-9]{10,15}$/)
         .message("Phone number must contain 10–15 digits")
         .optional(),
+    city: Joi.string().optional(),
+    zipCode: Joi.string().min(3).max(50).optional(),
     address: Joi.string().max(255).optional(),
-    bio: Joi.string().max(500).allow("").optional(),
+    addressTwo: Joi.string().max(255).optional(),
     avatar: Joi.string().uri().optional(),
-    gender: Joi.string().valid("male", "female", "other").optional(),
-    dateOfBirth: Joi.date().iso().optional(),
-    occupation: Joi.string().max(100).optional(),
-    status: Joi.string().valid("active", "inactive").default("active"),
-    socialLinks: Joi.object({
-        facebook: Joi.string().uri().optional(),
-        instagram: Joi.string().uri().optional(),
-        twitter: Joi.string().uri().optional(),
-        linkedin: Joi.string().uri().optional(),
-    }).optional(),
+    maxCatagorySelect: Joi.number().integer().min(1).max(50).optional().default(10),
+    maxAreaSelect: Joi.number().integer().min(1).max(50).optional().default(10),
+    isUpdated: Joi.boolean().optional().default(false),
 });
 
 export default profileSchema;

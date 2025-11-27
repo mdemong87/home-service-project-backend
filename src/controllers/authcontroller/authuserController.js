@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import Profile from "../../models/Profile.js";
 import User from "../../models/User.js";
 import generateToken from "../../utils/generateToken.js";
 import { loginSchema, registerSchema } from "../../validationSchema/authvalidation.js";
@@ -8,11 +9,18 @@ import { loginSchema, registerSchema } from "../../validationSchema/authvalidati
 /********************  User registration Controller here ***********************/
 const registerUser = async (req, res) => {
 
+
+
+
   try {
 
 
     // Validate body data using Joi schema
     const { error, value: { name, email, password, role } } = registerSchema.validate(req.body, { abortEarly: false });
+
+
+
+
 
 
     // If validation fails, return 400 with all validation errors
@@ -31,9 +39,18 @@ const registerUser = async (req, res) => {
     if (userExists) return res.status(409).json({ message: "User already exists" });
 
 
+
+    console.log({
+      name
+    });
+
+
+
     // Hash the password
     const salt = await bcrypt.genSalt(10); // 10 = number of salt rounds
     const hashedPassword = await bcrypt.hash(password, salt);
+
+
 
 
 
@@ -44,6 +61,30 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       role
     });
+
+
+    console.log(user);
+
+    const profile = await Profile.create({
+      authuserId: user._id,
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      userName: name,
+      role: role,
+      email: email,
+      phone: "",
+      city: "",
+      zipCode: "",
+      address: "",
+      addressTwo: "",
+      avatar: "",
+      maxCatagorySelect: 10,
+      maxAreaSelect: 10,
+      isUpdated: false,
+    })
+
+
 
 
     res.status(201).json({
