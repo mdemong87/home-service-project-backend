@@ -1,16 +1,69 @@
 import Joi from "joi";
 
 const productSchema = Joi.object({
-    name: Joi.string().required(),
+    name: Joi.string().min(2).max(100).required(),
+
+    experience: Joi.string().allow("").optional(),
+
+    promotiondis: Joi.string().allow("").optional(),
+
+    promotionalpriod: Joi.string().allow("").optional(),
+
+    email: Joi.string().email().required(),
+
+    phone: Joi.string().pattern(/^[0-9]{10,15}$/).required(),
+
     description: Joi.string().allow("").required(),
-    category: Joi.string().required(),
-    subcategory: Joi.string().required(),
-    price: Joi.number().positive().required(),
-    discount: Joi.number().min(0).optional(),
-    status: Joi.string().valid("published", "pending", "rejected").default("pending"),
-    about: Joi.string().allow("").required(),
-    categories: Joi.array().items(Joi.string()).min(1).required(),
-    areas: Joi.array().items(Joi.string()).min(1).required(),
+
+    license: Joi.array()
+        .items(
+            Joi.object({
+                name: Joi.string().required(),
+                size: Joi.number().required(),
+                type: Joi.string().required(),
+                base64: Joi.string().required(),
+            })
+        )
+        .min(0)
+        .optional(),
+
+    insurance: Joi.array()
+        .items(
+            Joi.object({
+                name: Joi.string().required(),
+                size: Joi.number().required(),
+                type: Joi.string().required(),
+                base64: Joi.string().required(),
+            })
+        )
+        .min(0)
+        .optional(),
+
+    serviceImages: Joi.array()
+        .items(
+            Joi.object({
+                name: Joi.string().required(),
+                size: Joi.number().required(),
+                type: Joi.string().required(),
+                base64: Joi.string().required(),
+            })
+        )
+        .min(1)
+        .required(),
+
+    selectedCategories: Joi.string().required(),
+
+    selectedAreas: Joi.string().required(),
+
+    selectedSubcategories: Joi.array()
+        .items(Joi.string())
+        .min(0)
+        .optional(),
+
+    selectedSubareas: Joi.array()
+        .items(Joi.string())
+        .min(0)
+        .optional(),
 });
 
 export default productSchema;

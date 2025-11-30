@@ -10,7 +10,7 @@ const reviewSchema = Joi.object({
         "any.required": "User ID is required",
     }),
 
-    reviewDescription: Joi.string().min(10).max(100).required().messages({
+    reviewDescription: Joi.string().min(10).max(500).required().messages({
         "string.min": "Review description must be at least 10 characters long",
         "string.max": "Review description must be at maximum 100 characters long",
         "any.required": "Review description is required",

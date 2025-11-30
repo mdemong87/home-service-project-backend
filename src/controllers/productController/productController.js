@@ -1,6 +1,7 @@
 import Product from "../../models/Product.js";
 import Review from "../../models/Review.js";
 import User from "../../models/User.js";
+import uploadFilesToCloudinary from "../../utils/uploadFilesToCloudinary.js";
 import productSchema from "../../validationSchema/productSchema.js";
 
 
@@ -165,7 +166,7 @@ const getSingleProduct = async (req, res) => {
       review.map(async (rev) => {
         const user = await User.findById(rev.userId);
 
-        const finalrview = { ...rev._doc, user: user ? { name: user.name, email: user.email, role: user.role } : null };
+        const finalrview = { ...rev._doc, user: user ? { fname: user.fname, mname: user.mname, lname: user.lname, phone: user.phone, email: user.email, role: user.role } : null };
         return finalrview;
 
       })
@@ -237,6 +238,7 @@ const getSingleProduct = async (req, res) => {
 /********** create product controller is here **********/
 const createProduct = async (req, res) => {
 
+
   try {
 
 
@@ -255,19 +257,29 @@ const createProduct = async (req, res) => {
     }
 
 
-    //  Validate files manually
-    if (!req.files?.license || !req.files?.insurance || !req.files?.serviceImages) {
-      return res.status(400).json({
-        success: false,
-        message: "Both license and insurance files are required.",
-      });
-    }
 
 
-    // Extract file URLs from Cloudinary (via multer-storage-cloudinary)
-    const licenseUrl = req.files.license[0].path;
-    const insuranceUrl = req.files.insurance[0].path;
-    const serviceImageUrls = req.files.serviceImages.map(file => file.path);
+    // upload files to cloudinary and get URLs (if any file upload logic is needed, implement here)
+
+
+    const licenseFiles = value.license || [];
+    const insuranceFiles = value.insurance || [];
+    const serviceImageFiles = value.serviceImages || [];
+
+
+
+    const licenseUrls = await uploadFilesToCloudinary(licenseFiles);
+    const insuranceUrls = await uploadFilesToCloudinary(insuranceFiles);
+    const serviceImageUrls = await uploadFilesToCloudinary(serviceImageFiles);
+
+
+    value.license = licenseUrls;
+    value.insurance = insuranceUrls;
+    value.serviceImages = serviceImageUrls;
+
+
+
+
 
 
 
@@ -276,9 +288,6 @@ const createProduct = async (req, res) => {
     // Merge validated body + file URLs
     const saveableData = {
       ...value,
-      license: licenseUrl,
-      insurance: insuranceUrl,
-      serviceImageUrls: serviceImageUrls,
     };
 
 

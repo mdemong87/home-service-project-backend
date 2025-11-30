@@ -2,12 +2,27 @@ import Joi from "joi";
 
 // Register validation schema
 export const registerSchema = Joi.object({
-    name: Joi.string().min(2).max(50).required().messages({
-        "string.base": "Name must be a text",
-        "string.empty": "Name is required",
-        "string.min": "Name must be at least 2 characters long",
-        "any.required": "Name is required",
+    fname: Joi.string().min(2).max(50).required().messages({
+        "string.base": "Frist Name must be a text",
+        "string.empty": "Frist Name is required",
+        "string.min": "Frist Name must be at least 2 characters long",
+        "any.required": "Frist Name is required",
     }),
+
+    mname: Joi.string().min(2).max(50).messages({
+        "string.base": "Middle Name must be a text",
+        "string.empty": "Middle Name is required",
+        "string.min": "Middle Name must be at least 2 characters long",
+        "any.required": "Middle Name is required",
+    }),
+
+    lname: Joi.string().min(2).max(50).required().messages({
+        "string.base": "Last Name must be a text",
+        "string.empty": "Last Name is required",
+        "string.min": "Last Name must be at least 2 characters long",
+        "any.required": "Last Name is required",
+    }),
+
 
     email: Joi.string().email().required().messages({
         "string.email": "Email must be valid",

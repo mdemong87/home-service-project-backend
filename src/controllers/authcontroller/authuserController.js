@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-import Profile from "../../models/Profile.js";
 import User from "../../models/User.js";
 import generateToken from "../../utils/generateToken.js";
 import { loginSchema, registerSchema } from "../../validationSchema/authvalidation.js";
@@ -12,11 +11,13 @@ const registerUser = async (req, res) => {
 
 
 
+
+
   try {
 
 
     // Validate body data using Joi schema
-    const { error, value: { name, email, password, role } } = registerSchema.validate(req.body, { abortEarly: false });
+    const { error, value: { fname, mname, lname, email, password, role } } = registerSchema.validate(req.body, { abortEarly: false });
 
 
 
@@ -40,11 +41,6 @@ const registerUser = async (req, res) => {
 
 
 
-    console.log({
-      name
-    });
-
-
 
     // Hash the password
     const salt = await bcrypt.genSalt(10); // 10 = number of salt rounds
@@ -56,33 +52,13 @@ const registerUser = async (req, res) => {
 
     // Create user with hashed password
     const user = await User.create({
-      name,
+      fname,
+      mname,
+      lname,
       email,
       password: hashedPassword,
       role
     });
-
-
-    console.log(user);
-
-    const profile = await Profile.create({
-      authuserId: user._id,
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      userName: name,
-      role: role,
-      email: email,
-      phone: "",
-      city: "",
-      zipCode: "",
-      address: "",
-      addressTwo: "",
-      avatar: "",
-      maxCatagorySelect: 10,
-      maxAreaSelect: 10,
-      isUpdated: false,
-    })
 
 
 
@@ -148,7 +124,9 @@ const loginUser = async (req, res) => {
       message: "User logged in successfully",
       data: {
         _id: user._id,
-        name: user.name,
+        fname: user.fname,
+        mname: user.mname,
+        lname: user.lname,
         email: user.email,
         role: user.role,
         token: generateToken(user._id, user.name, user.role),

@@ -21,9 +21,12 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
 
 
+  const { id } = req.params;
+
+
   try {
 
-    const users = await User.findById(req.user.id).select("-password").lean();
+    const users = await User.findById(id).select("-password").lean();
     res.json({
       success: true,
       message: "User fetched successfully",
@@ -41,9 +44,37 @@ const getUser = async (req, res) => {
 
 
 
+
+const updateUser = async (req, res) => {
+
+  const { id } = req.params;
+
+
+  try {
+
+    const users = await User.findByIdAndUpdate(id, req.body, { new: true });
+
+    res.json({
+      success: true,
+      message: "User updated successfully",
+      data: users
+    });
+  } catch (error) {
+
+    console.log(error);
+    res.status(500).json({ message: "There was a Server Error" });
+
+  }
+
+};
+
+
+
+
 /*********** modules export from here ************/
 export {
   getAllUsers,
-  getUser
+  getUser,
+  updateUser
 };
 

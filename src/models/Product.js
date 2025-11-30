@@ -1,8 +1,49 @@
 import mongoose from "mongoose";
 
+const fileSchema = new mongoose.Schema(
+    {
+        name: { type: String, required: true },
+        size: { type: Number, required: true },
+        type: { type: String, required: true },
+        base64: { type: String, required: true },
+    },
+    { _id: false }
+);
+
 const productSchema = new mongoose.Schema(
     {
         name: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+
+        experience: {
+            type: String,
+            default: "",
+            trim: true,
+        },
+
+        promotiondis: {
+            type: String,
+            default: "",
+            trim: true,
+        },
+
+        promotionalpriod: {
+            type: String,
+            default: "",
+            trim: true,
+        },
+
+        email: {
+            type: String,
+            required: true,
+            trim: true,
+            lowercase: true,
+        },
+
+        phone: {
             type: String,
             required: true,
             trim: true,
@@ -12,87 +53,66 @@ const productSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
-            default: "",
         },
 
-        category: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-
-        subcategory: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-
-        price: {
+        ranking: {
             type: Number,
-            required: true,
-            min: 0,
+            default: -1,
         },
 
-        discount: {
-            type: Number,
-            min: 0,
-            default: 0,
-        },
-
-        status: {
-            type: String,
-            enum: ["published", "pending", "rejected"],
-            default: "pending",
-        },
-
-        about: {
-            type: String,
-            required: true,
-            trim: true,
-            default: "",
-        },
-
+        // Array of license files (base64 objects)
         license: {
-            type: String,
-            required: true,
-            trim: true,
+            type: [String],
+            default: [],
         },
 
+        // Array of insurance files (base64 objects)
         insurance: {
+            type: [String],
+            default: [],
+        },
+
+        // Array of serviceImages (base64 objects)
+        serviceImages: {
+            type: [String],
+            required: true,
+            validate: {
+                validator: (arr) => Array.isArray(arr) && arr.length > 0,
+                message: "At least one service image is required",
+            },
+        },
+
+        // Single selected category
+        selectedCategories: {
             type: String,
             required: true,
             trim: true,
         },
 
-        categories: {
-            type: [String], // Array of category names or IDs
+        // Single selected area
+        selectedAreas: {
+            type: String,
             required: true,
-            validate: {
-                validator: (arr) => Array.isArray(arr) && arr.length > 0,
-                message: "At least one category is required",
-            },
+            trim: true,
         },
 
-        areas: {
-            type: [String], // Array of service areas
-            required: true,
-            validate: {
-                validator: (arr) => Array.isArray(arr) && arr.length > 0,
-                message: "At least one area is required",
-            },
+        // Multiple subcategories
+        selectedSubcategories: {
+            type: [String],
+            default: [],
         },
 
-        serviceImageUrls: {
-            type: [String], // Array of image URLs
+        // Multiple subareas
+        selectedSubareas: {
+            type: [String],
             default: [],
         },
     },
     {
-        timestamps: true, // adds createdAt and updatedAt automatically
+        timestamps: true,
     }
 );
 
-// Create the model (prevent redefining if hot-reloading)
 const Product =
     mongoose.models.Product || mongoose.model("Product", productSchema);
 

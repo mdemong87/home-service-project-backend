@@ -4,7 +4,17 @@ import mongoose from "mongoose";
 /*************** Define the schema Here ****************/
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    fname: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    mname: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    lname: {
       type: String,
       required: true,
       trim: true
@@ -23,7 +33,51 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["admin", "user", "provider"],
       default: "user"
-    }
+    },
+    phone: {
+      type: String,
+      default: '',
+    },
+    city: {
+      type: String,
+      default: '',
+      lowercase: true
+    },
+    zipcode: {
+      type: String,
+      default: "",
+      lowercase: true
+    },
+    address: {
+      type: String,
+      default: '',
+      lowercase: true
+    },
+    address2: {
+      type: String,
+      default: '',
+      lowercase: true
+    },
+
+    maxCatagorySelect: {
+      type: Number,
+      default: 10,
+      min: 1,
+      max: 50,
+    },
+
+    maxAreaSelect: {
+      type: Number,
+      default: 10,
+      min: 1,
+      max: 50,
+    },
+
+    isUpdated: {
+      type: Boolean,
+      default: false,
+    },
+
   },
   { timestamps: true } // adds createdAt & updatedAt automatically
 );
