@@ -1,6 +1,9 @@
 import Joi from "joi";
 
 const productSchema = Joi.object({
+
+    userID: Joi.string().required(),
+
     name: Joi.string().min(2).max(100).required(),
 
     experience: Joi.string().allow("").optional(),
@@ -11,7 +14,7 @@ const productSchema = Joi.object({
 
     email: Joi.string().email().required(),
 
-    phone: Joi.string().pattern(/^[0-9]{10,15}$/).required(),
+    phone: Joi.string().required(),
 
     description: Joi.string().allow("").required(),
 

@@ -12,6 +12,11 @@ const fileSchema = new mongoose.Schema(
 
 const productSchema = new mongoose.Schema(
     {
+        userID: {
+            type: String,
+            required: true,
+        },
+
         name: {
             type: String,
             required: true,
@@ -106,6 +111,11 @@ const productSchema = new mongoose.Schema(
         selectedSubareas: {
             type: [String],
             default: [],
+        },
+        status: {
+            type: String,
+            enum: ["pending", "approved",],
+            default: "pending",
         },
     },
     {
