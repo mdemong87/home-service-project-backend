@@ -166,7 +166,7 @@ const getSingleProduct = async (req, res) => {
       review.map(async (rev) => {
         const user = await User.findById(rev.userId);
 
-        const finalrview = { ...rev._doc, user: user ? { fname: user.fname, mname: user.mname, lname: user.lname, phone: user.phone, email: user.email, role: user.role } : null };
+        const finalrview = { ...rev._doc, user: user ? { fname: user.fname, mname: user.mname, lname: user.lname, phone: user.phone, email: user.email, role: user.role, city: user.city, address: user.address, zipcode: user.zipcode } : null };
         return finalrview;
 
       })
