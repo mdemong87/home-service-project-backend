@@ -1,11 +1,8 @@
 import Product from "../../models/Product.js";
 import Review from "../../models/Review.js";
 import User from "../../models/User.js";
-import uploadFilesToCloudinary from "../../utils/uploadFilesToCloudinary.js";
+import { productQueue } from "../../queues/product.queue.js";
 import productSchema from "../../validationSchema/productSchema.js";
-
-
-
 
 
 
@@ -16,7 +13,7 @@ const getAllProduct = async (req, res) => {
   try {
 
     // Extract optional query parameters for filtering/pagination
-    const { category, status, search, page = 1, limit = 10 } = req.query;
+    const { category, status, search, page = 1, limit = 100 } = req.query;
 
 
     // Build dynamic filter object
@@ -262,46 +259,51 @@ const createProduct = async (req, res) => {
     // upload files to cloudinary and get URLs (if any file upload logic is needed, implement here)
 
 
-    const licenseFiles = value.license || [];
-    const insuranceFiles = value.insurance || [];
-    const serviceImageFiles = value.serviceImages || [];
+    // const licenseFiles = value.license || [];
+    // const insuranceFiles = value.insurance || [];
+    // const serviceImageFiles = value.serviceImages || [];
 
 
 
-    const licenseUrls = await uploadFilesToCloudinary(licenseFiles);
-    const insuranceUrls = await uploadFilesToCloudinary(insuranceFiles);
-    const serviceImageUrls = await uploadFilesToCloudinary(serviceImageFiles);
+    // const licenseUrls = await uploadFilesToCloudinary(licenseFiles);
+    // const insuranceUrls = await uploadFilesToCloudinary(insuranceFiles);
+    // const serviceImageUrls = await uploadFilesToCloudinary(serviceImageFiles);
 
 
-    value.license = licenseUrls;
-    value.insurance = insuranceUrls;
-    value.serviceImages = serviceImageUrls;
+    // value.license = licenseUrls;
+    // value.insurance = insuranceUrls;
+    // value.serviceImages = serviceImageUrls;
 
 
 
 
-
+    // Send job to BullMQ queue
+    const job = await productQueue.add("create-product", {
+      productData: value
+    });
 
 
 
 
     // Merge validated body + file URLs
-    const saveableData = {
-      ...value,
-    };
+    // const saveableData = {
+    //   ...value,
+    // };
 
 
 
     // Create product in database
-    const product = await Product.create(saveableData);
+    // const product = await Product.create(saveableData);
 
 
 
     // Send success response
     res.status(201).json({
       success: true,
-      message: "Product created successfully!",
-      data: product,
+      //message: "Product created successfully!",
+      // data: product,
+      message: "Product is being processed. You will see it soon.",
+      jobId: job.id,
     });
 
   } catch (err) {
@@ -313,12 +315,6 @@ const createProduct = async (req, res) => {
   }
 
 };
-
-
-
-
-
-
 
 
 
