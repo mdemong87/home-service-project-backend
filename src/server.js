@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 
-
 if (environment === "development") {
   /*********** Start The Server ***********/
   app.listen(PORT, () => {

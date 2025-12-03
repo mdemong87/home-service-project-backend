@@ -15,6 +15,7 @@ import healthRoutes from "./routes/health/healthRoute.js";
 import productRoutes from './routes/productroute/productRoute.js';
 import reviewRoutes from './routes/review/reviewRoutes.js';
 import userRoutes from './routes/userroute/userRoutes.js';
+import "./workers/product.worker.js";
 
 
 
