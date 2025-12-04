@@ -12,6 +12,7 @@ import adminRoutes from './routes/adminRoutes/adminRoutes.js';
 import authRoutes from './routes/authroute/authUserRoutes.js';
 import contactRoutes from "./routes/contactRoutes/contactRoutes.js";
 import healthRoutes from "./routes/health/healthRoute.js";
+import pointRoutes from './routes/pointRoutes/pointRoutes.js';
 import productRoutes from './routes/productroute/productRoute.js';
 import reviewRoutes from './routes/review/reviewRoutes.js';
 import userRoutes from './routes/userroute/userRoutes.js';
@@ -81,6 +82,9 @@ app.use("/", reviewRoutes);
 app.use("/", contactRoutes);
 
 
+
+/**************** point Routes Define Here *********************/
+app.use("/", pointRoutes);
 
 
 /********** Admin Routes Define Here *********/

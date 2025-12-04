@@ -18,7 +18,26 @@ const reviewSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
-            minlength: 10, // optional: ensure at least some detail
+            minlength: 50, // optional: ensure at least some detail
+            maxlength: 1000,
+        },
+
+        amountSpent: {
+            type: Number,
+            required: true,
+            min: 0,
+        },
+
+        whatsgood: {
+            type: String,
+            trim: true,
+            default: "",
+        },
+
+        whatsbad: {
+            type: String,
+            trim: true,
+            default: "",
         },
 
         reviewStar: {

@@ -1,4 +1,6 @@
+import Point from "../../models/Point.js";
 import Review from "../../models/Review.js";
+import countCharacters from "../../utils/countCharacters.js";
 import reviewSchema from "../../validationSchema/reviewvalidation.js";
 
 const createReview = async (req, res) => {
@@ -25,6 +27,16 @@ const createReview = async (req, res) => {
         // Create product in database
         const review = await Review.create(value);
 
+
+
+        // if review description more than 100 character then add point to user
+        const descatactureCount = countCharacters(value?.reviewDescription);
+        if (descatactureCount > 100) {
+            await Point.create({
+                userId: value?.userId,
+                point: 1,
+            });
+        }
 
 
         // Send success response
