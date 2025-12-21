@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
+import OTP from "../../models/OtpTracking.js";
 import User from "../../models/User.js";
 import generateToken from "../../utils/generateToken.js";
+import { generateOTP, sendEmail } from "../../utils/optsender.js";
 import { loginSchema, registerSchema } from "../../validationSchema/authvalidation.js";
 
 
@@ -59,6 +61,9 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       role
     });
+
+
+
 
 
 
@@ -168,7 +173,152 @@ const logoutUser = async (req, res) => {
 
 
 
-export {
-  loginUser, logoutUser, registerUser
+
+// controllers/auth.controller.js
+const forgotPassword = async (req, res) => {
+
+  try {
+
+    const { email } = req.body;
+
+
+
+    // Check if user exists
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({ success: false, status: 404, message: "User not found" });
+    }
+
+
+
+    const myEmail = user.email;
+
+    // Generate OTP
+    const otp = generateOTP();
+
+    // Send OTP via email
+    await sendEmail(myEmail, otp);
+
+    await OTP.findOneAndUpdate(
+      { email: myEmail }, // or { userId: user._id } depending on your needs
+      {
+        otp,
+        email: myEmail,
+        userId: user._id,
+        createdAt: new Date() // Update timestamp
+      },
+      {
+        upsert: true, // Create if doesn't exist
+        new: true // Return updated document
+      }
+    );
+
+
+
+    return res.status(200).json({
+      success: true,
+      message: "OTP Send succesfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Server error while logging out.",
+    });
+  }
 };
+
+
+
+
+
+
+
+
+
+// controllers/auth.controller.js
+const verifyOTp = async (req, res) => {
+
+  try {
+
+    const { email, otp } = req.body;
+
+
+
+    // Check if user exists
+    const saveOtp = await OTP.findOne({ email });
+
+
+
+    if (saveOtp?.otp != otp) {
+
+      return res.status(400).json({
+        success: false,
+        message: "OTP Does not Match",
+      });
+    }
+
+
+
+
+    return res.status(200).json({
+      success: true,
+      message: "OTP Verify succesfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Server error while logging out.",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+// controllers/auth.controller.js
+const changePassword = async (req, res) => {
+
+  try {
+
+    const { email, password } = req.body;
+
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10); // 10 = number of salt rounds
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+
+
+
+    // Check if user exists
+    await User.findOneAndUpdate({ email: email }, // or { userId: user._id } depending on your needs
+      {
+        password: hashedPassword
+      },);
+
+
+    return res.status(200).json({
+      success: true,
+      message: "Password Change succesfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Server error while Change the Password",
+    });
+  }
+};
+
+
+
+
+
+export { changePassword, forgotPassword, loginUser, logoutUser, registerUser, verifyOTp };
 
